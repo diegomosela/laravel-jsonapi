@@ -41,7 +41,7 @@ In few steps you can expose your models:
 
     Your controller is responsible to handling input, instantiating a handler class and returning the response.
 
-    ```php
+```php
 <?php namespace App\Http\Controllers;
 
 use EchoIt\JsonApi\Request as ApiRequest;
@@ -66,7 +66,7 @@ class ApiController extends Controller
 			$sort = ($i = Request::input('sort')) ? explode(',', $i) : $i;
 			$filter = ($i = Request::except('sort', 'include', 'page')) ? $i : [];
 			$content = Request::getContent();
-			
+
 			$page = Request::input('page');
 			$pageSize = null;
 			$pageNumber = null;
@@ -87,7 +87,7 @@ class ApiController extends Controller
             } catch (ApiException $e) {
                 return $e->response();
             }
-			
+
             return $res->toJsonResponse();
         }
 
@@ -95,7 +95,7 @@ class ApiController extends Controller
         return new ApiErrorResponse(404, 404, 'Entity not found');
     }
 }
-    ```
+```
 
 3. **Create a handler for your model**
 
@@ -106,10 +106,10 @@ class ApiController extends Controller
     * GET /users (ie. handleGet function)
     * GET /users/[id] (ie. handleGet function)
     * PUT /users/[id] (ie. handlePut function)
-    
+
     Requests are automatically routed to appropriate handle functions.
 
-    ```php
+```php
 <?php namespace App\Handlers;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -126,26 +126,26 @@ use Request;
 class UsersHandler extends ApiHandler
 {
 	const ERROR_SCOPE = 1024;
-	
+
 	/*
 	* List of relations that can be included in response.
 	* (eg. 'friend' could be included with ?include=friend)
 	*/
 	protected static $exposedRelations = [];
-	
+
 	/**
-	 * Handles GET requests. 
+	 * Handles GET requests.
 	 * @param EchoIt\JsonApi\Request $request
 	 * @return EchoIt\JsonApi\Model|Illuminate\Support\Collection|EchoIt\JsonApi\Response|Illuminate\Pagination\LengthAwarePaginator
 	 */
 	public function handleGet(ApiRequest $request)
 	{
-		//you can use the default GET functionality, or override with your own 
+		//you can use the default GET functionality, or override with your own
 		return $this->handleGetDefault($request, new User);
 	}
-	
+
 	/**
-	 * Handles PUT requests. 
+	 * Handles PUT requests.
 	 * @param EchoIt\JsonApi\Request $request
 	 * @return EchoIt\JsonApi\Model|Illuminate\Support\Collection|EchoIt\JsonApi\Response
 	 */
@@ -155,7 +155,7 @@ class UsersHandler extends ApiHandler
 		return $this->handlePutDefault($request, new User);
 	}
 }
-    ```
+```
 
     > **Note:** Extend your models from `EchoIt\JsonApi\Model` rather than `Eloquent` to get the proper response for linked resources.
 
@@ -172,8 +172,8 @@ According to [jsonapi.org](http://jsonapi.org):
 * [Filtering](http://jsonapi.org/format/#fetching-filtering)
 * [Pagination] (http://jsonapi.org/format/#fetching-pagination)
 
-The features in the Handler class are each in their own function (eg. handlePaginationRequest, handleSortRequest, etc.), so you can easily override them with your own behaviour if desired. 
-	
+The features in the Handler class are each in their own function (eg. handlePaginationRequest, handleSortRequest, etc.), so you can easily override them with your own behaviour if desired.
+
 
 Wishlist
 -----
